@@ -108,6 +108,15 @@ class TechTreeLayout(Choice):
     option_choices = 11
     default = 0
 
+class CarePackages(DefaultOnToggle):
+    """Shuffle care packages"""
+
+class CarePackageTraps(Toggle):
+    """Add traps that come from the Printing Pod (i.e. Morb)"""
+
+class ColonyTraps(Toggle):
+    """Add traps that get applied globally or to random Duplicants (i.e. random disease)"""
+
 oni_options: typing.Dict[str, type(Option)] = {
     "dlc": DLC,
     #"tech_tree_information": TechTreeInformation,
@@ -118,5 +127,6 @@ oni_options: typing.Dict[str, type(Option)] = {
     "building_cost": BuildingCostMultiplier,
     "research_cost": ResearchCostMultiplier,
     "death_link": DeathLinkDupe,
-    "traps": Toggle,
+    "care_package_traps": CarePackageTraps,
+    "colony_traps": ColonyTraps
 }
