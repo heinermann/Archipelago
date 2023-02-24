@@ -2,6 +2,23 @@ import typing
 
 from Options import Choice, Option, Toggle, Range, DeathLink, DefaultOnToggle
 
+
+class NumResearches(Range):
+    """Number of research tree items."""
+    display_name = "Total Locations"
+    range_start = 50
+    range_end = 400
+    default = 100
+
+
+class NumCarePackages(Range):
+    """Number of location checks which are added to the playthrough."""
+    display_name = "Total Locations"
+    range_start = 75
+    range_end = 500
+    default = 100
+
+
 class DLC(Choice):
     """DLC content to include."""
     display_name = "DLC"
@@ -9,8 +26,10 @@ class DLC(Choice):
     option_spaced_out = 1
     default = 0
 
+
 class DeathLinkDupe(DeathLink):
-    """When a Duplicant in your colony dies, everyone dies. Of course the reverse is true too."""
+    """When a Duplicant in your colony dies, everyone else dies. Of course the reverse is true too."""
+
 
 # TODO
 #class TechTreeInformation(Choice):
@@ -21,12 +40,14 @@ class DeathLinkDupe(DeathLink):
 #    option_full = 2
 #    default = 2
 
+
 class Monument(Choice):
     """Ingredients to build a Great Monument."""
     display_name = "Great Monument"
     option_vanilla = 0
     option_randomize_recipe = 1
     default = 1
+
 
 class Goal(Choice):
     """Goal required to complete the game."""
@@ -36,6 +57,7 @@ class Goal(Choice):
     option_the_great_escape = 2
     option_all = 3
     default = 0
+
 
 # Temporary notes (TODO not going to think about research separation right now beyond this):
 # - Progressive Planter (Planter Box, Farm Tile, Hydroponic Farm)
@@ -61,6 +83,7 @@ class Goal(Choice):
 # - Progressive Food Storage (Ration Box, Refrigerator)
 # - Progressive Storage (Storage Bin, Smart Storage Bin)
 
+
 #class ResearchType(Choice):
 #    """Splits the unlockable buildings into separate items instead of research. If "Progressive" is chosen, merges some buildings such as pipes into multiple copies of "Progressive Pipe"."""
 #    display_name = "Research Type"
@@ -70,12 +93,14 @@ class Goal(Choice):
 #    option_progressive_split = 3
 #    default = 0
 
+
 class StartingResearch(Choice):
     """Allows you to start with all the first tier research for faster early game progression."""
     display_name = "Starting Buildings"
     option_vanilla = 0
     option_basics = 1
     default = 0
+
 
 class BuildingCostMultiplier(Range):
     """Modifies building cost (percentage)."""
@@ -84,12 +109,14 @@ class BuildingCostMultiplier(Range):
     range_end = 300
     default = 100
 
+
 class ResearchCostMultiplier(Range):
     """Modifies research cost (percentage)."""
     display_name = "Research Cost"
     range_start = 1
     range_end = 300
     default = 100
+
 
 class TechTreeLayout(Choice):
     """Selects how the tech tree nodes are interwoven."""
@@ -108,14 +135,18 @@ class TechTreeLayout(Choice):
     option_choices = 11
     default = 0
 
+
 class CarePackages(DefaultOnToggle):
     """Shuffle care packages"""
+
 
 class CarePackageTraps(Toggle):
     """Add traps that come from the Printing Pod (i.e. Morb)"""
 
+
 class ColonyTraps(Toggle):
     """Add traps that get applied globally or to random Duplicants (i.e. random disease)"""
+
 
 oni_options: typing.Dict[str, type(Option)] = {
     "dlc": DLC,
