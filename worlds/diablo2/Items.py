@@ -2,12 +2,13 @@ import itertools
 from collections import Counter
 from typing import Dict, List, NamedTuple, Set
 
-from BaseClasses import Item, ItemClassification, MultiWorld
-from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
+from BaseClasses import Item, ItemClassification
+from . import Diablo2World
 
 
 class ItemData(NamedTuple):
     code: int
+    act: int
     group: str
     classification: ItemClassification = ItemClassification.progression
     required_num: int = 0
@@ -27,7 +28,7 @@ def create_fixed_item_pool() -> List[str]:
     return list(Counter(required_items).elements())
 
 
-def create_random_items(world: "Diablo2World", random_count: int) -> List[str]:
+def create_random_items(world: Diablo2World, random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
     if world.options.traps.value == 0:
         del filler_pool["Trap"]
@@ -39,7 +40,7 @@ def create_random_items(world: "Diablo2World", random_count: int) -> List[str]:
     )
 
 
-def create_all_items(world: "Diablo2World") -> None:
+def create_all_items(world: Diablo2World) -> None:
     sum_locations = len(world.multiworld.get_unfilled_locations(world.player))
 
     itempool = create_fixed_item_pool()
@@ -47,71 +48,71 @@ def create_all_items(world: "Diablo2World") -> None:
     random_count = sum_locations - len(itempool)
     itempool += create_random_items(world, random_count)
 
-    multiworld.itempool += [create_item(world.player, name) for name in itempool]
+    world.multiworld.itempool += [world.create_item(name) for name in itempool]
 
 
 # Total: 33
 # 120000 - 120041
 item_table: Dict[str, ItemData] = {
-    "Trap":                                 ItemData(120000, "Traps", ItemClassification.trap),
+    "Trap":                                 ItemData(120000, 0, "Traps", ItemClassification.trap),
 
     # Act 1
     # 8
-    "Act 1 Merc Unlock":                    ItemData(120001, "Mercenary", ItemClassification.useful, 1),
-    "Scroll of Inifuss":                    ItemData(120002, "Quest", ItemClassification.progression, 1),
-    "Wirt's Leg":                           ItemData(120003, "Quest", ItemClassification.useful, 1),
-    "Horadric Malus":                       ItemData(120004, "Quest", ItemClassification.useful, 1),
-    "Skill Reset (Akara)":                  ItemData(120005, "Reward", ItemClassification.useful, 1),
-    "Free Item Identification (Cain)":      ItemData(120006, "Reward", ItemClassification.useful, 1),
-    "Item Imbuement (Charsi)":              ItemData(120007, "Reward", ItemClassification.useful, 1),
-    "One Skill Point (Akara)":              ItemData(120008, "Reward", ItemClassification.useful, 1),
+    "Act 1 Merc Unlock":                    ItemData(120001, 1, "Mercenary", ItemClassification.useful, 1),
+    "Scroll of Inifuss":                    ItemData(120002, 1, "Quest", ItemClassification.progression, 1),
+    "Wirt's Leg":                           ItemData(120003, 1, "Quest", ItemClassification.useful, 1),
+    "Horadric Malus":                       ItemData(120004, 1, "Quest", ItemClassification.useful, 1),
+    "Skill Reset (Akara)":                  ItemData(120005, 1, "Reward", ItemClassification.useful, 1),
+    "Free Item Identification (Cain)":      ItemData(120006, 1, "Reward", ItemClassification.useful, 1),
+    "Item Imbuement (Charsi)":              ItemData(120007, 1, "Reward", ItemClassification.useful, 1),
+    "One Skill Point (Akara)":              ItemData(120008, 1, "Reward", ItemClassification.useful, 1),
 
     # Act 2
     # 8
-    "Act 2 Merc Unlock":                    ItemData(120009, "Mercenary", ItemClassification.useful, 1),
-    "Book of Skill":                        ItemData(120010, "Reward", ItemClassification.useful, 1),
-    "Lower Vendor Prices":                  ItemData(120011, "Reward", ItemClassification.useful, 1),
-    "Horadric Cube":                        ItemData(120012, "Quest", ItemClassification.progression, 1),
-    "Staff of Kings":                       ItemData(120013, "Quest", ItemClassification.progression, 1),
-    "Amulet of the Viper":                  ItemData(120014, "Quest", ItemClassification.progression, 1),
-    "Dispell Darkness":                     ItemData(120015, "Quest", ItemClassification.useful, 1),
-    "True Symbol of Tal Rasha's Tomb":      ItemData(120016, "Quest", ItemClassification.progression, 1),
+    "Act 2 Merc Unlock":                    ItemData(120009, 2, "Mercenary", ItemClassification.useful, 1),
+    "Book of Skill":                        ItemData(120010, 2, "Reward", ItemClassification.useful, 1),
+    "Lower Vendor Prices":                  ItemData(120011, 2, "Reward", ItemClassification.useful, 1),
+    "Horadric Cube":                        ItemData(120012, 2, "Quest", ItemClassification.progression, 1),
+    "Staff of Kings":                       ItemData(120013, 2, "Quest", ItemClassification.progression, 1),
+    "Amulet of the Viper":                  ItemData(120014, 2, "Quest", ItemClassification.progression, 1),
+    "Dispell Darkness":                     ItemData(120015, 2, "Quest", ItemClassification.useful, 1),
+    "True Symbol of Tal Rasha's Tomb":      ItemData(120016, 2, "Quest", ItemClassification.progression, 1),
 
     # Act 3
     # 9
-    "Act 3 Merc Unlock":                    ItemData(120017, "Mercenary", ItemClassification.useful, 1),
-    "The Golden Bird":                      ItemData(120018, "Quest", ItemClassification.useful, 1),
-    "The Gidbinn":                          ItemData(120019, "Quest", ItemClassification.useful, 1),
-    "Lam Esen's Tome":                      ItemData(120020, "Quest", ItemClassification.useful, 1),
-    "Khalim's Eye":                         ItemData(120021, "Quest", ItemClassification.progression, 1),
-    "Khalim's Brain":                       ItemData(120022, "Quest", ItemClassification.progression, 1),
-    "Khalim's Heart":                       ItemData(120023, "Quest", ItemClassification.progression, 1),
-    "Khalim's Flail":                       ItemData(120024, "Quest", ItemClassification.progression, 1),
-    "Mephisto's Soulstone":                 ItemData(120025, "Quest", ItemClassification.useful, 1),
+    "Act 3 Merc Unlock":                    ItemData(120017, 3, "Mercenary", ItemClassification.useful, 1),
+    "The Golden Bird":                      ItemData(120018, 3, "Quest", ItemClassification.useful, 1),
+    "The Gidbinn":                          ItemData(120019, 3, "Quest", ItemClassification.useful, 1),
+    "Lam Esen's Tome":                      ItemData(120020, 3, "Quest", ItemClassification.useful, 1),
+    "Khalim's Eye":                         ItemData(120021, 3, "Quest", ItemClassification.progression, 1),
+    "Khalim's Brain":                       ItemData(120022, 3, "Quest", ItemClassification.progression, 1),
+    "Khalim's Heart":                       ItemData(120023, 3, "Quest", ItemClassification.progression, 1),
+    "Khalim's Flail":                       ItemData(120024, 3, "Quest", ItemClassification.progression, 1),
+    "Mephisto's Soulstone":                 ItemData(120025, 3, "Quest", ItemClassification.useful, 1),
 
     # Act 4
     # 2
-    "Hellforge Hammer":                     ItemData(120026, "Quest", ItemClassification.useful, 1),
-    "Two Skill Points (Tyrael)":            ItemData(120027, "Reward", ItemClassification.useful, 1),
+    "Hellforge Hammer":                     ItemData(120026, 4, "Quest", ItemClassification.useful, 1),
+    "Two Skill Points (Tyrael)":            ItemData(120027, 4, "Reward", ItemClassification.useful, 1),
 
     # Act 5
     # 6
-    "Act 5 Merc Unlock":                    ItemData(120028, "Mercenary", ItemClassification.useful, 1),
-    "Malah's Potion":                       ItemData(120029, "Quest", ItemClassification.useful, 1),
-    "Item Socketing (Larzuk)":              ItemData(120030, "Reward", ItemClassification.useful, 1),
-    "Scroll of Resistance":                 ItemData(120031, "Reward", ItemClassification.useful, 1),
-    "Item Inscription (Anya)":              ItemData(120032, "Reward", ItemClassification.useful, 1),
-    "One Level Up (Ancients)":              ItemData(120033, "Reward", ItemClassification.useful, 1),
+    "Act 5 Merc Unlock":                    ItemData(120028, 5, "Mercenary", ItemClassification.useful, 1),
+    "Malah's Potion":                       ItemData(120029, 5, "Quest", ItemClassification.useful, 1),
+    "Item Socketing (Larzuk)":              ItemData(120030, 5, "Reward", ItemClassification.useful, 1),
+    "Scroll of Resistance":                 ItemData(120031, 5, "Reward", ItemClassification.useful, 1),
+    "Item Inscription (Anya)":              ItemData(120032, 5, "Reward", ItemClassification.useful, 1),
+    "One Level Up (Ancients)":              ItemData(120033, 5, "Reward", ItemClassification.useful, 1),
 
     # Filler Items
-    "Skill Point":                          ItemData(120034, "Stuff", ItemClassification.useful),
-    "5 Stat Points":                        ItemData(120035, "Stuff", ItemClassification.useful),
-    "Gold (250)":                           ItemData(120036, "Stuff", ItemClassification.filler),
-    "Gold (1000)":                          ItemData(120037, "Stuff", ItemClassification.filler),
-    "Random Rune":                          ItemData(120038, "Stuff", ItemClassification.filler),
-    "Random Gem":                           ItemData(120039, "Stuff", ItemClassification.filler),
-    "Rare Ring":                            ItemData(120040, "Stuff", ItemClassification.filler),
-    "Rare Amulet":                          ItemData(120041, "Stuff", ItemClassification.filler),
+    "Skill Point":                          ItemData(120034, 0, "Stuff", ItemClassification.useful),
+    "5 Stat Points":                        ItemData(120035, 0, "Stuff", ItemClassification.useful),
+    "Gold (250)":                           ItemData(120036, 0, "Stuff", ItemClassification.filler),
+    "Gold (1000)":                          ItemData(120037, 0, "Stuff", ItemClassification.filler),
+    "Random Rune":                          ItemData(120038, 0, "Stuff", ItemClassification.filler),
+    "Random Gem":                           ItemData(120039, 0, "Stuff", ItemClassification.filler),
+    "Rare Ring":                            ItemData(120040, 0, "Stuff", ItemClassification.filler),
+    "Rare Amulet":                          ItemData(120041, 0, "Stuff", ItemClassification.filler),
 }
 
 filler_weights: Dict[str, int] = {
@@ -134,10 +135,6 @@ def get_item_group(item_name: str) -> str:
 
 def item_is_filler(item_name: str) -> bool:
     return item_table[item_name].classification == ItemClassification.filler
-
-
-def item_is_perk(item_name: str) -> bool:
-    return item_table[item_name].group == "Perks"
 
 
 filler_items: List[str] = list(filter(item_is_filler, item_table.keys()))

@@ -1,6 +1,6 @@
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from . import Events, Items, Locations, Regions, Rules
+from . import Items, Locations, Regions, Rules
 from .Options import Diablo2Options
 
 
@@ -32,7 +32,7 @@ class Diablo2World(World):
 
     item_name_groups = Items.item_name_groups
     location_name_groups = Locations.location_name_groups
-    data_version = 2
+    data_version = 1
 
     web = Diablo2Web()
 

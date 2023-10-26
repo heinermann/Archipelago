@@ -1,4 +1,4 @@
-from Options import AssembleOptions, DeathLink, DefaultOnToggle, PerGameCommonOptions, Toggle
+from Options import DeathLink, DefaultOnToggle, PerGameCommonOptions, Toggle
 from dataclasses import dataclass
 
 

@@ -1,11 +1,11 @@
 # Regions are areas in your game that you travel to.
 from typing import Dict, Set
 
-from BaseClasses import Entrance, MultiWorld, Region
-from . import Events, Locations
+from BaseClasses import Entrance, Region
+from . import Diablo2World, Events, Locations
 
 
-def add_locations(world: "Diablo2World", region: Region) -> None:
+def add_locations(world: Diablo2World, region: Region) -> None:
     locations = Locations.location_region_mapping.get(region.name, {})
     for location_name, location_data in locations.items():
         location_type = location_data.ltype
@@ -25,25 +25,25 @@ def add_locations(world: "Diablo2World", region: Region) -> None:
 
 
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.
-def create_region(world: "Diablo2World", region_name: str) -> Region:
+def create_region(world: Diablo2World, region_name: str) -> Region:
     new_region = Region(region_name, world.player, world.multiworld)
     add_locations(world, new_region)
     return new_region
 
 
-def get_connection_data(world: "Diablo2World") -> Dict[str, Set[str]]:
+def get_connection_data(world: Diablo2World) -> Dict[str, Set[str]]:
     if world.options.is_expansion:
         return d2_expansion_connections
     return d2_connections
 
 
-def get_region_data(world: "Diablo2World") -> Set[str]:
+def get_region_data(world: Diablo2World) -> Set[str]:
     if world.options.is_expansion:
         return d2_expansion_regions
     return d2_regions
 
 
-def create_regions(world: "Diablo2World") -> Dict[str, Region]:
+def create_regions(world: Diablo2World) -> Dict[str, Region]:
     return {name: create_region(world, name) for name in get_region_data(world)}
 
 
@@ -55,14 +55,14 @@ def create_entrance(player: int, source: str, destination: str, regions: Dict[st
 
 
 # Creates connections based on our access mapping in `d2_connections`.
-def create_connections(world: "Diablo2World", regions: Dict[str, Region]) -> None:
+def create_connections(world: Diablo2World, regions: Dict[str, Region]) -> None:
     for source, destinations in get_connection_data(world).items():
         new_entrances = [create_entrance(world.player, source, destination, regions) for destination in destinations]
         regions[source].exits = new_entrances
 
 
 # Creates all regions and connections. Called from Diablo2World.
-def create_all_regions_and_connections(world: "Diablo2World") -> None:
+def create_all_regions_and_connections(world: Diablo2World) -> None:
     created_regions = create_regions(world)
     create_connections(world, created_regions)
     Events.create_all_events(world, created_regions)

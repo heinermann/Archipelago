@@ -1,6 +1,6 @@
 # Locations are specific points that you would obtain an item at.
 from enum import IntEnum
-from typing import Dict, NamedTuple, Optional, Set
+from typing import Dict, NamedTuple, Set
 
 from BaseClasses import Location
 
@@ -22,20 +22,17 @@ class LocationData(NamedTuple):
     ltype: LocType = LocType.none
 
 
-
 # Mapping of items in each region.
-# The superunique ltype is only used for the option to exclude them, so it makes sense to include a few
-# superuniques you must kill anyway (or those that are genuinely unique and not just a reskin).
+# - superunique: only used for the option to exclude them, so it makes sense to include a few superuniques you must
+#    kill anyway (or those that are genuinely unique and not just a reskin).
+# - goldenchest: just golden chest locations.
+# - waypoint: for waypoints as checks.
 #
-# goldenchest are just golden chest locations.
-#
-# waypoint for waypoints as checks.
-#
-# Always: 53
-# Waypoints: 34
-# Superuniques: 26 (additional)
-# Golden Chests: 22
-# Total: 135
+# Always: 53 (40 vanilla)
+# Waypoints: 34 (26)
+# Superuniques: 26 (additional) (17)
+# Golden Chests: 22 (16)
+# Total: 135 (99)
 # 120000 - 120135
 location_region_mapping: Dict[str, Dict[str, LocationData]] = {
     # Act 1

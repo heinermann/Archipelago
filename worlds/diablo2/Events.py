@@ -1,15 +1,17 @@
 from typing import Dict
 
-from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region
-from . import Items, Locations
+from BaseClasses import Item, ItemClassification, Location, Region
+from .Items import D2Item
+from .Locations import D2Location
+from . import Diablo2World
 
 
 def create_event(player: int, name: str) -> Item:
-    return Items.D2Item(name, ItemClassification.progression, None, player)
+    return D2Item(name, ItemClassification.progression, None, player)
 
 
 def create_location(player: int, name: str, region: Region) -> Location:
-    return Locations.D2Location(player, name, None, region)
+    return D2Location(player, name, None, region)
 
 
 def create_locked_location_event(player: int, region: Region, item: str) -> Location:
@@ -20,7 +22,7 @@ def create_locked_location_event(player: int, region: Region, item: str) -> Loca
     return new_location
 
 
-def create_all_events(world: "Diablo2World", regions: Dict[str, Region]) -> None:
+def create_all_events(world: Diablo2World, regions: Dict[str, Region]) -> None:
     for region_name, event in event_locks.items():
         region = regions[region_name]
         create_locked_location_event(world.player, region, event)
