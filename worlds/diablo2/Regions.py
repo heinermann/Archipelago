@@ -10,14 +10,12 @@ def add_locations(world: Diablo2World, region: Region) -> None:
     for location_name, location_data in locations.items():
         location_type = location_data.ltype
 
-        match location_type:
-            case Locations.LocType.waypoint:
-                if not world.options.waypoints_as_checks: continue
-            case Locations.LocType.goldenchest:
-                if not world.options.goldenchests_as_checks: continue
-            case Locations.LocType.superunique:
-                if not world.options.superuniques_as_checks: continue
-
+        if location_type == Locations.LocType.waypoint and not world.options.waypoints_as_checks:
+            continue
+        if location_type == Locations.LocType.goldenchest and not world.options.goldenchests_as_checks:
+            continue
+        if location_type == Locations.LocType.superunique and not world.options.superuniques_as_checks:
+            continue
         if not world.options.is_expansion and location_data.group == "Act 5":
             continue
 
@@ -122,7 +120,8 @@ d2_connections: Dict[str, Set[str]] = {
     "River of Flame": {"Chaos Sanctuary"},
 }
 
-d2_expansion_connections: Dict[str, Set[str]] = {**d2_connections,
+d2_expansion_connections: Dict[str, Set[str]] = {
+    **d2_connections,
     # Act 4
     "Pandemonium Fortress": {"Harrogath", "Outer Steppes"},
 
