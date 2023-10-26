@@ -360,11 +360,6 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
 }
 
 
-# Iterating the hidden chest and pedestal locations here to avoid clutter above
-def generate_location_entries(locname: str, locinfo: LocationData) -> Dict[str, int]:
-    return {locname: locinfo.id}
-
-
 location_name_groups: Dict[str, Set[str]] = {
     "Act 1": set(), "Act 2": set(), "Act 3": set(), "Act 4": set(), "Act 5": set()
 }
@@ -373,5 +368,5 @@ location_name_to_id: Dict[str, int] = {}
 
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
-        location_name_to_id.update(generate_location_entries(locname, locinfo))
+        location_name_to_id[locname] = locinfo.id
         location_name_groups[locinfo.group].add(locname)

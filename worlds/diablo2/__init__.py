@@ -1,6 +1,7 @@
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from . import Events, Items, Locations, Options, Regions, Rules
+from . import Events, Items, Locations, Regions, Rules
+from .Options import Diablo2Options
 
 
 class Diablo2Web(WebWorld):
@@ -23,7 +24,8 @@ class Diablo2World(World):
     """
 
     game = "Diablo II"
-    option_definitions = Options.diablo2_options
+    options_dataclass = Diablo2Options
+    options: Diablo2Options
 
     item_name_to_id = Items.item_name_to_id
     location_name_to_id = Locations.location_name_to_id
@@ -36,20 +38,20 @@ class Diablo2World(World):
 
     # Returned items will be sent over to the client
     def fill_slot_data(self):
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+        return self.options.as_dict("death_link", "waypoints_as_checks", "superuniques_as_checks",
+                                    "goldenchests_as_checks")
 
     def create_regions(self) -> None:
-        Regions.create_all_regions_and_connections(self.multiworld, self.player)
-        Events.create_all_events(self.multiworld, self.player)
+        Regions.create_all_regions_and_connections(self)
 
     def create_item(self, name: str) -> Item:
         return Items.create_item(self.player, name)
 
     def create_items(self) -> None:
-        Items.create_all_items(self.multiworld, self.player)
+        Items.create_all_items(self)
 
     def set_rules(self) -> None:
-        Rules.create_all_rules(self.multiworld, self.player)
+        Rules.create_all_rules(self)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(Items.filler_items)
+        return self.random.choice(Items.filler_items)

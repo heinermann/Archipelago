@@ -27,32 +27,27 @@ def create_fixed_item_pool() -> List[str]:
     return list(Counter(required_items).elements())
 
 
-def create_random_items(multiworld: MultiWorld, player: int, random_count: int) -> List[str]:
+def create_random_items(world: "Diablo2World", random_count: int) -> List[str]:
     filler_pool = filler_weights.copy()
-    if multiworld.traps[player].value == 0:
+    if world.options.traps.value == 0:
         del filler_pool["Trap"]
 
-    return multiworld.random.choices(
+    return world.random.choices(
         population=list(filler_pool.keys()),
         weights=list(filler_pool.values()),
         k=random_count
     )
 
 
-def create_all_items(multiworld: MultiWorld, player: int) -> None:
-    sum_locations = len(multiworld.get_unfilled_locations(player))
+def create_all_items(world: "Diablo2World") -> None:
+    sum_locations = len(world.multiworld.get_unfilled_locations(world.player))
 
-    itempool = (
-        create_fixed_item_pool()
-        + create_orb_items(multiworld.victory_condition[player], multiworld.extra_orbs[player])
-        + create_spatial_awareness_item(multiworld.bosses_as_checks[player])
-        + create_kantele(multiworld.victory_condition[player])
-    )
+    itempool = create_fixed_item_pool()
 
     random_count = sum_locations - len(itempool)
-    itempool += create_random_items(multiworld, player, random_count)
+    itempool += create_random_items(world, random_count)
 
-    multiworld.itempool += [create_item(player, name) for name in itempool]
+    multiworld.itempool += [create_item(world.player, name) for name in itempool]
 
 
 # Total: 33

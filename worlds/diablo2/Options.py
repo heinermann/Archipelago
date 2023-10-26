@@ -1,8 +1,8 @@
-from typing import Dict
-from Options import AssembleOptions, DeathLink, DefaultOnToggle, Toggle
+from Options import AssembleOptions, DeathLink, DefaultOnToggle, PerGameCommonOptions, Toggle
+from dataclasses import dataclass
 
 
-class Traps(DefaultOnToggle):
+class Traps(Toggle):
     """Whether negative effects that can hinder your character are added to the item pool."""
     display_name = "Traps"
 
@@ -22,10 +22,16 @@ class GoldenChestsAsChecks(Toggle):
     display_name = "Golden Chests as Checks"
 
 
-diablo2_options: Dict[str, AssembleOptions] = {
-    "death_link": DeathLink,
-    "traps": Traps,
-    "waypoints_as_checks": WaypointsAsChecks,
-    "superuniques_as_checks": SuperuniquesAsChecks,
-    "goldenchests_as_checks": GoldenChestsAsChecks,
-}
+class IsLordOfDestruction(DefaultOnToggle):
+    """Includes the Diablo II: Lord of Destruction expansion content."""
+    display_name = "Is Expansion"
+
+
+@dataclass
+class Diablo2Options(PerGameCommonOptions):
+    death_link: DeathLink
+    traps: Traps
+    waypoints_as_checks: WaypointsAsChecks
+    superuniques_as_checks: SuperuniquesAsChecks
+    goldenchests_as_checks: GoldenChestsAsChecks
+    is_expansion: IsLordOfDestruction
